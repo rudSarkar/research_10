@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  web:
+    build: .
+    ports:
+      - "8989:8989"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: research_10_db
+      MYSQL_PASSWORD: SecurePasswordEasyToGuess
+      MYSQL_ROOT_PASSWORD: SecurePasswordEasyToGuess
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+volumes:
+  db_data:
